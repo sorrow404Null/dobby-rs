@@ -1,0 +1,16 @@
+[package]
+name = "dobby-hook"
+version = "0.1.1"
+edition = "2024"
+rust-version = "1.93.1"
+license = "Apache-2.0"
+description = "Facade crate for dobby inline-hook core and optional framework"
+readme = "../README.md"
+
+[features]
+default = []
+framework = ["dep:dobby-rs-framework"]
+
+[dependencies]
+dobby-hook-core = { path = "../dobby-rs", package = "dobby-hook-core", version = "0.1.1" }
+dobby-rs-framework = { path = "../framework", version = "0.1.1", optional = true }
