@@ -12,5 +12,5 @@ default = []
 framework = ["dep:dobby-rs-framework"]
 
 [dependencies]
-dobby-hook-core = { path = "../dobby-rs", package = "dobby-hook-core", version = "0.1.1" }
+dobby-hook-core = { path = "../dobby-rs", version = "0.1.1" }
 dobby-rs-framework = { path = "../framework", version = "0.1.1", optional = true }
