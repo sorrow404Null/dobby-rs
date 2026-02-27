@@ -1,6 +1,6 @@
 [package]
 name = "dobby-rs-framework"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 rust-version = "1.93.1"
 license = "Apache-2.0"
@@ -13,7 +13,7 @@ keywords = ["hook", "inline-hook", "framework", "instrumentation"]
 categories = ["development-tools::debugging"]
 
 [dependencies]
-dobby-rs = { path = "../dobby-rs", package = "dobby-hook-core", version = "0.1.3" }
+dobby-rs = { path = "../dobby-rs", package = "dobby-hook-core", version = "0.1.4" }
 once_cell = "1.21.3"
 log = "0.4.29"
 simplelog = { version = "0.12.2", default-features = false, features = ["termcolor"] }

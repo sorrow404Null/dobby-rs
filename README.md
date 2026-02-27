@@ -31,7 +31,7 @@ Or in `Cargo.toml`:
 
 ```toml
 [dependencies]
-dobby-hook = { version = "0.1.3", features = ["framework"] }
+dobby-hook = { version = "0.1.4", features = ["framework"] }
 ```
 
 Core only (no framework):

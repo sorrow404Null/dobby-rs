@@ -1,6 +1,6 @@
 [package]
 name = "dobby-hook"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 rust-version = "1.93.1"
 license = "Apache-2.0"
@@ -17,5 +17,5 @@ default = []
 framework = ["dep:dobby-rs-framework"]
 
 [dependencies]
-dobby-hook-core = { path = "../dobby-rs", version = "0.1.3" }
-dobby-rs-framework = { path = "../framework", version = "0.1.3", optional = true }
+dobby-hook-core = { path = "../dobby-rs", version = "0.1.4" }
+dobby-rs-framework = { path = "../framework", version = "0.1.4", optional = true }
