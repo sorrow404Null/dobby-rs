@@ -54,17 +54,17 @@ pub(crate) unsafe fn alloc_executable_near(
             }
         }
 
-        if off != 0 {
-            if let Some(a) = pos.checked_sub(off) {
-                let p = VirtualAlloc(
-                    a as *mut _,
-                    size,
-                    MEM_COMMIT | MEM_RESERVE,
-                    PAGE_EXECUTE_READWRITE,
-                );
-                if !p.is_null() {
-                    return Ok(p);
-                }
+        if off != 0
+            && let Some(a) = pos.checked_sub(off)
+        {
+            let p = VirtualAlloc(
+                a as *mut _,
+                size,
+                MEM_COMMIT | MEM_RESERVE,
+                PAGE_EXECUTE_READWRITE,
+            );
+            if !p.is_null() {
+                return Ok(p);
             }
         }
     }
