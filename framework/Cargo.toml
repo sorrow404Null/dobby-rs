@@ -1,17 +1,19 @@
 [package]
 name = "dobby-rs-framework"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 rust-version = "1.93.1"
 license = "Apache-2.0"
 description = "Developer-friendly framework on top of dobby-rs core"
+repository = "https://github.com/sorrow404Null/dobby-rs"
+homepage = "https://github.com/sorrow404Null/dobby-rs"
 readme = "README.md"
 documentation = "https://docs.rs/dobby-rs-framework"
 keywords = ["hook", "inline-hook", "framework", "instrumentation"]
 categories = ["development-tools::debugging"]
 
 [dependencies]
-dobby-rs = { path = "../dobby-rs", package = "dobby-hook-core", version = "0.1.1" }
+dobby-rs = { path = "../dobby-rs", package = "dobby-hook-core", version = "0.1.2" }
 once_cell = "1.21.3"
 log = "0.4.29"
 simplelog = { version = "0.12.2", default-features = false, features = ["termcolor"] }

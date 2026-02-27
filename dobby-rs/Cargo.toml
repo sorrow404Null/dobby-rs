@@ -1,10 +1,12 @@
 [package]
 name = "dobby-hook-core"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 rust-version = "1.93.1"
 license = "Apache-2.0"
 description = "Dobby-like low-level inline hook core in Rust"
+repository = "https://github.com/sorrow404Null/dobby-rs"
+homepage = "https://github.com/sorrow404Null/dobby-rs"
 readme = "README.md"
 documentation = "https://docs.rs/dobby-hook-core"
 keywords = ["hook", "inline-hook", "trampoline", "instrumentation"]

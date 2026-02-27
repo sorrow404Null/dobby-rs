@@ -2,7 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/dobby-hook-core.svg)](https://crates.io/crates/dobby-hook-core)
 [![docs.rs](https://img.shields.io/docsrs/dobby-hook-core)](https://docs.rs/dobby-hook-core)
-[![License](https://img.shields.io/badge/License-Apache_2.0-red.svg)](../LICENSE)
+[![License](https://img.shields.io/badge/License-Apache_2.0-red.svg)](https://github.com/sorrow404Null/dobby-rs/blob/master/LICENSE)
 
 `dobby-hook-core` is the low-level inline hook core used by `dobby-hook`.
 

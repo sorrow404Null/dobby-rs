@@ -2,7 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/dobby-rs-framework.svg)](https://crates.io/crates/dobby-rs-framework)
 [![docs.rs](https://img.shields.io/docsrs/dobby-rs-framework)](https://docs.rs/dobby-rs-framework)
-[![License](https://img.shields.io/badge/License-Apache_2.0-red.svg)](../LICENSE)
+[![License](https://img.shields.io/badge/License-Apache_2.0-red.svg)](https://github.com/sorrow404Null/dobby-rs/blob/master/LICENSE)
 
 Ergonomic hooking utilities built on top of `dobby-rs`.
 
