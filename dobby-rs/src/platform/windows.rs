@@ -4,8 +4,8 @@ use core::ptr;
 use windows_sys::Win32::Foundation::{GetLastError, HANDLE};
 use windows_sys::Win32::System::Diagnostics::Debug::FlushInstructionCache;
 use windows_sys::Win32::System::Memory::{
-    VirtualAlloc, VirtualFree, VirtualProtect, MEM_COMMIT, MEM_RELEASE, MEM_RESERVE,
-    PAGE_EXECUTE_READWRITE,
+    MEM_COMMIT, MEM_RELEASE, MEM_RESERVE, PAGE_EXECUTE_READWRITE, VirtualAlloc, VirtualFree,
+    VirtualProtect,
 };
 use windows_sys::Win32::System::Threading::GetCurrentProcess;
 

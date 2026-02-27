@@ -14,14 +14,14 @@ Recommended (enable framework feature):
 
 ```toml
 [dependencies]
-dobby-hook = { version = "0.1.2", features = ["framework"] }
+dobby-hook = { version = "0.1.3", features = ["framework"] }
 ```
 
 Core only:
 
 ```toml
 [dependencies]
-dobby-hook = "0.1.2"
+dobby-hook = "0.1.3"
 ```
 
 ## What You Get
