@@ -5,7 +5,7 @@ edition = "2024"
 rust-version = "1.93.1"
 license = "Apache-2.0"
 description = "Facade crate for dobby inline-hook core and optional framework"
-readme = "../README.md"
+readme = "README.md"
 
 [features]
 default = []
