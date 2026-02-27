@@ -5,6 +5,19 @@ static ALLOC_NEAR_CODE_CB: AtomicUsize = AtomicUsize::new(0);
 
 pub type AllocNearCodeCallback = unsafe fn(size: u32, pos: usize, range: usize) -> usize;
 
+pub(crate) fn near_trampoline_enabled() -> bool {
+    NEAR_TRAMPOLINE.load(Ordering::Relaxed)
+}
+
+pub(crate) fn alloc_near_code_callback() -> Option<AllocNearCodeCallback> {
+    let p = ALLOC_NEAR_CODE_CB.load(Ordering::Relaxed);
+    if p == 0 {
+        None
+    } else {
+        Some(unsafe { core::mem::transmute::<usize, AllocNearCodeCallback>(p) })
+    }
+}
+
 pub fn set_near_trampoline(enable: bool) {
     NEAR_TRAMPOLINE.store(enable, Ordering::Relaxed);
 }

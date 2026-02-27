@@ -13,6 +13,9 @@ impl X64HookPlatform for PlatformOps {
     unsafe fn alloc_executable(size: usize) -> Result<*mut c_void> {
         platform::windows::alloc_executable(size)
     }
+    unsafe fn alloc_executable_near(size: usize, pos: usize, range: usize) -> Result<*mut c_void> {
+        platform::windows::alloc_executable_near(size, pos, range)
+    }
     unsafe fn free_executable(ptr: *mut c_void, _size: usize) -> Result<()> {
         platform::windows::free_executable(ptr)
     }

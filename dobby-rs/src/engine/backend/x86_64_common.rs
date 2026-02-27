@@ -1,5 +1,6 @@
 use super::HookBuild;
 use crate::error::{Error, Result};
+use crate::options;
 use core::ffi::c_void;
 use core::ptr;
 use iced_x86::{
@@ -8,6 +9,13 @@ use iced_x86::{
 
 pub(crate) trait X64HookPlatform {
     unsafe fn alloc_executable(size: usize) -> Result<*mut c_void>;
+    unsafe fn alloc_executable_near(
+        size: usize,
+        _pos: usize,
+        _range: usize,
+    ) -> Result<*mut c_void> {
+        Self::alloc_executable(size)
+    }
     unsafe fn free_executable(ptr: *mut c_void, size: usize) -> Result<()>;
     unsafe fn flush_icache(address: *mut c_void, size: usize) -> Result<()>;
     unsafe fn write_detour_with_nops(
@@ -44,11 +52,45 @@ pub(crate) unsafe fn hook_build<P: X64HookPlatform>(
     }
     let original = core::slice::from_raw_parts(address as *const u8, stolen_len).to_vec();
     let tramp_size = 256usize;
-    let tramp = P::alloc_executable(tramp_size)?;
-    let block = InstructionBlock::new(&insns, tramp as u64);
-    let encoded = BlockEncoder::encode(64, block, BlockEncoderOptions::NONE)
-        .map_err(|_| Error::EncodeFailed)?;
-    let code = encoded.code_buffer;
+
+    // Try a normal trampoline allocation first. If relocation/encoding fails (common with RIP-relative
+    // instructions when the trampoline is too far away), retry with a near allocation.
+    let mut tramp = P::alloc_executable(tramp_size)?;
+    let code = match BlockEncoder::encode(
+        64,
+        InstructionBlock::new(&insns, tramp as u64),
+        BlockEncoderOptions::NONE,
+    ) {
+        Ok(encoded) => encoded.code_buffer,
+        Err(_) => {
+            let _ = P::free_executable(tramp, tramp_size);
+
+            let range = 0x7fff_ffffusize;
+            tramp = if let Some(cb) = options::alloc_near_code_callback() {
+                let p = cb(tramp_size as u32, address as usize, range);
+                if p == 0 {
+                    P::alloc_executable_near(tramp_size, address as usize, range)?
+                } else {
+                    p as *mut c_void
+                }
+            } else if options::near_trampoline_enabled() {
+                P::alloc_executable_near(tramp_size, address as usize, range)?
+            } else {
+                // Even if near trampoline wasn't explicitly enabled, it's worth retrying near since
+                // EncodeFailed usually means "trampoline too far".
+                P::alloc_executable_near(tramp_size, address as usize, range)?
+            };
+
+            BlockEncoder::encode(
+                64,
+                InstructionBlock::new(&insns, tramp as u64),
+                BlockEncoderOptions::NONE,
+            )
+            .map_err(|_| Error::EncodeFailed)?
+            .code_buffer
+        }
+    };
+
     if code.len() + 14 > tramp_size {
         let _ = P::free_executable(tramp, tramp_size);
         return Err(Error::EncodeFailed);

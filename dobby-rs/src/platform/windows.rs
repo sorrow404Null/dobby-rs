@@ -4,8 +4,8 @@ use core::ptr;
 use windows_sys::Win32::Foundation::{GetLastError, HANDLE};
 use windows_sys::Win32::System::Diagnostics::Debug::FlushInstructionCache;
 use windows_sys::Win32::System::Memory::{
-    MEM_COMMIT, MEM_RELEASE, MEM_RESERVE, PAGE_EXECUTE_READWRITE, VirtualAlloc, VirtualFree,
-    VirtualProtect,
+    VirtualAlloc, VirtualFree, VirtualProtect, MEM_COMMIT, MEM_RELEASE, MEM_RESERVE,
+    PAGE_EXECUTE_READWRITE,
 };
 use windows_sys::Win32::System::Threading::GetCurrentProcess;
 
@@ -24,6 +24,53 @@ pub(crate) unsafe fn alloc_executable(size: usize) -> Result<*mut c_void> {
         return Err(last_error());
     }
     Ok(p)
+}
+
+pub(crate) unsafe fn alloc_executable_near(
+    size: usize,
+    pos: usize,
+    range: usize,
+) -> Result<*mut c_void> {
+    // Best-effort: allocate within +/- 2GB of `pos` so RIP-relative instructions can be relocated.
+    // Windows allocation base addresses must be 64KB aligned.
+    const GRANULARITY: usize = 0x10000;
+    let step = GRANULARITY;
+
+    let pos = pos & !(GRANULARITY - 1);
+    let max_steps = (range / step).min(0x1_0000);
+
+    for i in 0..=max_steps {
+        let off = i * step;
+
+        if let Some(a) = pos.checked_add(off) {
+            let p = VirtualAlloc(
+                a as *mut _,
+                size,
+                MEM_COMMIT | MEM_RESERVE,
+                PAGE_EXECUTE_READWRITE,
+            );
+            if !p.is_null() {
+                return Ok(p);
+            }
+        }
+
+        if off != 0 {
+            if let Some(a) = pos.checked_sub(off) {
+                let p = VirtualAlloc(
+                    a as *mut _,
+                    size,
+                    MEM_COMMIT | MEM_RESERVE,
+                    PAGE_EXECUTE_READWRITE,
+                );
+                if !p.is_null() {
+                    return Ok(p);
+                }
+            }
+        }
+    }
+
+    // Fallback to anywhere.
+    alloc_executable(size)
 }
 
 pub(crate) unsafe fn free_executable(ptr: *mut c_void) -> Result<()> {
