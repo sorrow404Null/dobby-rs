@@ -2,9 +2,14 @@ use crate::error::{Error, Result};
 use core::ffi::c_void;
 use core::ptr;
 
-#[cfg(any(target_os = "linux", target_os = "android"))]
+#[cfg(target_os = "linux")]
 unsafe fn errno() -> i32 {
     *libc::__errno_location()
+}
+
+#[cfg(target_os = "android")]
+unsafe fn errno() -> i32 {
+    *libc::__errno()
 }
 
 #[cfg(any(target_os = "macos", target_os = "ios"))]
