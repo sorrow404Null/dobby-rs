@@ -108,13 +108,8 @@ pub(crate) unsafe fn with_writeable(
 }
 
 #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
-unsafe extern "C" {
-    fn __clear_cache(begin: *mut u8, end: *mut u8);
-}
-
-#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
 pub(crate) unsafe fn flush_icache(address: *mut c_void, size: usize) {
-    __clear_cache(address as *mut u8, (address as *mut u8).add(size));
+    clear_cache::clear_cache(address as *mut u8, (address as *mut u8).add(size));
 }
 
 #[cfg(not(any(target_arch = "arm", target_arch = "aarch64")))]
